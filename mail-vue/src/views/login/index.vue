@@ -88,21 +88,21 @@
             <path d="M 95 315 Q 105 325 115 315" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
           </g>
 
-          <g class="doctor-doll" v-show="show === 'login' && !isEmailFocused">
+          <g class="doctor-doll" v-if="show === 'login' && !isEmailFocused">
             <g class="doll-run">
               <g class="doll-bounce">
                 
                 <g class="svg-speech-bubble" @click.stop="show = 'register'">
-                  <rect x="-70" y="-45" width="140" height="28" rx="14" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <rect x="-80" y="-45" width="160" height="28" rx="14" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
                   <polygon points="-6,-18 6,-18 0,-12" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-54, -36)">
+                  <g transform="translate(-65, -38)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                     <path d="M 13 2 L 13 8 M 10 5 L 16 5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
                   </g>
 
-                  <text x="6" y="-27" fill="#fff" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                  <text x="10" y="-31" fill="#fff" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -375,7 +375,7 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "输入账号中... 不要输入错误哦", icon: "mingcute:eye-2-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 不要输错哦", icon: "mingcute:eye-2-fill" };
     return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
@@ -771,7 +771,7 @@ function submitRegister() {
   100% { transform: translateY(-40px); } 
 }
 
-/* ★ 纯 SVG气泡 的交互与样式 ★ */
+/* 纯 SVG气泡 的交互与样式 */
 .svg-speech-bubble {
   cursor: pointer;
   transform-origin: 0px -12px;
