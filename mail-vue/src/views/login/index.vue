@@ -22,6 +22,12 @@
         </div>
 
         <svg viewBox="0 0 400 400" width="100%" height="100%" overflow="visible">
+          <defs>
+            <filter id="bubble-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1890ff" flood-opacity="0.3"/>
+            </filter>
+          </defs>
+
           <rect x="100" y="110" width="90" height="240" fill="#6c38ff" />
           <g class="eyes purple-eyes">
             <template v-if="!isPwdFocused">
@@ -85,14 +91,22 @@
           <g class="doctor-doll" v-show="show === 'login' && !isEmailFocused">
             <g class="doll-run">
               <g class="doll-bounce">
-                <foreignObject x="-80" y="-70" width="160" height="50" style="overflow: visible;">
-                  <div class="doll-speech-wrapper">
-                    <div class="doll-speech-bubble" @click.stop="show = 'register'">
-                      <Icon icon="mingcute:user-add-fill" width="14" height="14" style="margin-right: 4px;" />
-                      点击 Sign Up 注册！
-                    </div>
-                  </div>
-                </foreignObject>
+                
+                <g class="svg-speech-bubble" @click.stop="show = 'register'">
+                  <rect x="-70" y="-45" width="140" height="28" rx="14" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <polygon points="-6,-18 6,-18 0,-12" fill="#1890ff" class="bubble-bg" />
+                  
+                  <g transform="translate(-54, -36)">
+                    <circle cx="6" cy="4" r="2.5" fill="#fff"/>
+                    <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
+                    <path d="M 13 2 L 13 8 M 10 5 L 16 5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+                  </g>
+
+                  <text x="6" y="-27" fill="#fff" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                    点击 Sign Up 注册！
+                  </text>
+                </g>
+
                 <path d="M 0 -18 L 16 -12 L 0 -6 L -16 -12 Z" fill="#1a1a1a"/>
                 <path d="M -8 -9 L -8 -3 Q 0 2 8 -3 L 8 -9 Z" fill="#1a1a1a"/>
                 <line x1="0" y1="-12" x2="16" y2="-2" stroke="#e8c300" stroke-width="2.5" stroke-linecap="round"/>
@@ -361,7 +375,7 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "输入账号中... 不错输入错误哦", icon: "mingcute:eye-2-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 不要输入错误哦", icon: "mingcute:eye-2-fill" };
     return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
@@ -668,7 +682,6 @@ function submitRegister() {
   }
 }
 
-/* ★ 底部版权信息：强制定宽且不换行，保障小屏布局 ★ */
 .copyright {
   position: absolute;
   bottom: 20px;
@@ -682,7 +695,6 @@ function submitRegister() {
   white-space: nowrap; 
 }
 
-/* ★ 核心修复：引入 aspect-ratio 让插画框响应式等比例缩放，彻底解决 iPad 不跟随问题 ★ */
 .illustration-container {
   width: 90%;
   max-width: 500px;
@@ -699,7 +711,6 @@ function submitRegister() {
   }
 }
 
-/* 提示气泡同样强制不换行，并在屏幕缩小时自动适配字体大小 */
 .hint-bubble {
   position: absolute;
   z-index: 20;
@@ -721,7 +732,7 @@ function submitRegister() {
   border-radius: 20px;
   color: #333;
   font-weight: 600;
-  font-size: clamp(12px, 2vw, 14px); /* 弹性字体 */
+  font-size: clamp(12px, 2vw, 14px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.06);
   border: 1px solid rgba(255,255,255,0.5);
 }
@@ -734,7 +745,7 @@ function submitRegister() {
   padding: 8px 0;
   color: #ffffff;
   font-weight: 600;
-  font-size: clamp(13px, 2.5vw, 15px); /* 弹性字体 */
+  font-size: clamp(13px, 2.5vw, 15px);
   letter-spacing: 0.5px;
   border: 1px solid transparent;
   box-shadow: none;
@@ -760,47 +771,23 @@ function submitRegister() {
   100% { transform: translateY(-40px); } 
 }
 
-.doll-speech-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  width: 100%;
-  height: 100%;
-  padding-bottom: 5px;
-}
-.doll-speech-bubble {
-  display: flex;
-  align-items: center;
-  background: #1890ff;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 20px;
+/* ★ 纯 SVG气泡 的交互与样式 ★ */
+.svg-speech-bubble {
   cursor: pointer;
-  position: relative;
-  box-shadow: 0 4px 12px rgba(24,144,255,0.3);
-  transition: all 0.2s ease;
-  pointer-events: auto; 
-  white-space: nowrap; /* 绝对不换行 */
+  transform-origin: 0px -12px;
+  transition: transform 0.2s ease;
 }
-.doll-speech-bubble:hover {
+
+.svg-speech-bubble:hover {
   transform: scale(1.05) translateY(-2px);
-  background: #40a9ff;
 }
-.doll-speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 4px 4px 0;
-  border-style: solid;
-  border-color: #1890ff transparent transparent transparent;
-  transition: border-color 0.2s ease;
+
+.svg-speech-bubble:hover .bubble-bg {
+  fill: #40a9ff;
 }
-.doll-speech-bubble:hover::after {
-  border-color: #40a9ff transparent transparent transparent;
+
+.bubble-bg {
+  transition: fill 0.2s ease;
 }
 
 
@@ -832,23 +819,22 @@ function submitRegister() {
   }
 }
 
-/* ★ 移动端提示框修复：使用弹性字体和不换行属性 ★ */
 .mobile-interactive-hint {
   display: none;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: clamp(11px, 3.5vw, 13px); /* 字体自适应缩放 */
+  font-size: clamp(11px, 3.5vw, 13px);
   color: #555;
   background: #f5f7fa;
   border: 1px solid #e4e7ed;
   border-radius: 8px;
-  padding: 10px 12px; /* 调整内边距适应窄屏 */
+  padding: 10px 12px;
   margin-bottom: 25px;
   text-align: center;
   line-height: 1.5;
   transition: all 0.3s ease;
-  white-space: nowrap; /* 绝对禁止换行 */
+  white-space: nowrap;
 
   &.is-email {
     background: rgba(255, 138, 51, 0.08); 
@@ -909,7 +895,6 @@ function submitRegister() {
   align-items: center;
 }
 
-/* 防止主标题挤换行 */
 .form-title {
   font-size: clamp(20px, 5vw, 28px);
   font-weight: 700;
