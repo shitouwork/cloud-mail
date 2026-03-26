@@ -93,15 +93,15 @@
               <g class="doll-bounce">
                 
                 <g class="svg-speech-bubble" @click.stop="show = 'register'">
-                  <rect x="-80" y="-45" width="160" height="28" rx="14" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
-                  <polygon points="-6,-18 6,-18 0,-12" fill="#1890ff" class="bubble-bg" />
+                  <rect x="-65" y="-42" width="130" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <polygon points="-5,-19 5,-19 0,-14" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-62, -38)">
+                  <g transform="translate(-50, -36) scale(0.9)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="8" y="-31" fill="#fff" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                  <text x="5" y="-30" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -349,6 +349,7 @@ const isPwdFocused = ref(false);
 const isEmailFocused = ref(false); 
 const currentFocus = ref(''); 
 
+// 控制密码可见性的状态
 const showLoginPwd = ref(false);
 const showRegPwd = ref(false);
 const showRegConfirmPwd = ref(false);
@@ -373,7 +374,7 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "老大输入中... 不要输错哦", icon: "mingcute:eye-2-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 不要输错哦", icon: "mingcute:eye-2-fill" };
     return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
@@ -750,12 +751,21 @@ function submitRegister() {
   text-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.doll-run {
-  animation: doll-run 3.5s infinite alternate ease-in-out;
+/* ★ 悬浮暂停动画：彻底解决一直晃眼、点不到的问题 ★ */
+.doctor-doll {
+  cursor: pointer;
+}
+.doctor-doll:hover .doll-run,
+.doctor-doll:hover .doll-bounce {
+  animation-play-state: paused;
 }
 
+/* ★ 呼吸式跃动：拉长周期，变得宁静且高级 ★ */
+.doll-run {
+  animation: doll-run 4s infinite alternate ease-in-out;
+}
 .doll-bounce {
-  animation: doll-bounce 0.45s infinite alternate ease-out;
+  animation: doll-bounce 3s infinite ease-in-out;
 }
 
 @keyframes doll-run {
@@ -764,9 +774,10 @@ function submitRegister() {
   100% { transform: translate(237px, 220px); } 
 }
 
+/* 3秒循环一次：短暂轻跳，然后长时间静止，舒适不晃眼 */
 @keyframes doll-bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-40px); } 
+  0%, 20%, 100% { transform: translateY(0); }
+  10% { transform: translateY(-20px); } 
 }
 
 .svg-speech-bubble {
