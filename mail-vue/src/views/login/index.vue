@@ -100,15 +100,15 @@
                    @click.stop="show = 'register'" 
                    :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'">
                   
-                  <rect x="-60" y="-39" width="120" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <rect x="-55" y="-39" width="110" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
                   <polygon points="-4,-17 4,-17 0,-13" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-48, -34) scale(0.8)">
+                  <g transform="translate(-45, -34) scale(0.8)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="3" y="-28" fill="#fff" font-size="10" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.2px;">
+                  <text x="6" y="-28" fill="#fff" font-size="9.5" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.5px;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -795,12 +795,10 @@ function submitRegister() {
   animation-play-state: paused;
 }
 
-/* ★ 回归经典的 0.45s 轻盈弹跳节奏 ★ */
 .doll-bounce-wrapper.is-bouncing {
   animation: doll-bounce 0.45s infinite alternate ease-out;
 }
 
-/* ★ 配合三只怪兽，完成 3.5s 的左右平滑巡视跑酷 ★ */
 .doll-run-wrapper.is-running {
   animation: doll-run 3.5s infinite alternate ease-in-out;
 }
