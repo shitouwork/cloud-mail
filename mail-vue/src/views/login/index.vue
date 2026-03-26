@@ -100,15 +100,15 @@
                    @click.stop="show = 'register'" 
                    :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'">
                   
-                  <rect x="-55" y="-39" width="110" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <rect x="-62.5" y="-39" width="125" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
                   <polygon points="-4,-17 4,-17 0,-13" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-45, -34) scale(0.8)">
+                  <g transform="translate(-48, -34) scale(0.8)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="6" y="-28" fill="#fff" font-size="9.5" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.5px;">
+                  <text x="52" y="-28" fill="#fff" font-size="9.5" font-weight="600" text-anchor="end" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.5px;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
