@@ -98,18 +98,17 @@
                 
                 <g class="svg-speech-bubble" 
                    @click.stop="show = 'register'" 
-                   :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'"
-                   transform="scale(0.95)">
+                   :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'">
                   
-                  <rect x="-70" y="-42" width="140" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
-                  <polygon points="-5,-19 5,-19 0,-14" fill="#1890ff" class="bubble-bg" />
+                  <rect x="-60" y="-39" width="120" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <polygon points="-4,-17 4,-17 0,-13" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-56, -36) scale(0.85)">
+                  <g transform="translate(-48, -34) scale(0.8)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="6" y="-30" fill="#fff" font-size="10.5" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.2px;">
+                  <text x="3" y="-28" fill="#fff" font-size="10" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.2px;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -410,8 +409,8 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "输入账号中... 不要输错哦", icon: "mingcute:eye-2-fill" };
-    return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 我们在看着哦", icon: "mingcute:eye-2-fill" };
+    return { text: "欢迎回来！请输入账号和密码", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
     if (isPwdFocused.value) return { text: "设个密码吧，我们绝不偷看", icon: "mingcute:eye-close-fill" };
@@ -796,11 +795,12 @@ function submitRegister() {
   animation-play-state: paused;
 }
 
-/* ★ 丝滑的物理重力跳跃：模拟重力的加减速，彻底解决生硬抖动 ★ */
+/* ★ 回归经典的 0.45s 轻盈弹跳节奏 ★ */
 .doll-bounce-wrapper.is-bouncing {
-  animation: doll-bounce 2.5s infinite;
+  animation: doll-bounce 0.45s infinite alternate ease-out;
 }
 
+/* ★ 配合三只怪兽，完成 3.5s 的左右平滑巡视跑酷 ★ */
 .doll-run-wrapper.is-running {
   animation: doll-run 3.5s infinite alternate ease-in-out;
 }
@@ -834,16 +834,8 @@ function submitRegister() {
 }
 
 @keyframes doll-bounce {
-  /* 0%~10% 向上跳跃(缓出减速) */
-  0%, 20%, 100% { 
-    transform: translateY(0); 
-    animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); 
-  }
-  /* 10%~20% 向下回落(缓入加速) */
-  10% { 
-    transform: translateY(-22px); 
-    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); 
-  } 
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-40px); } 
 }
 
 .svg-speech-bubble {
