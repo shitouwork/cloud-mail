@@ -88,20 +88,27 @@
             <path d="M 95 315 Q 105 325 115 315" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
           </g>
 
-          <g class="doctor-doll" v-if="show === 'login' && !isEmailFocused">
-            <g class="doll-run">
-              <g class="doll-bounce">
+          <g class="doctor-doll" 
+             v-if="show === 'login' && !isEmailFocused"
+             @mouseenter="handleDollMouseEnter"
+             @mouseleave="handleDollMouseLeave">
+            
+            <g :class="['doll-run-wrapper', { 'is-running': !isDollResting, 'is-resting': isDollResting }]">
+              <g :class="['doll-bounce-wrapper', { 'is-bouncing': !isDollResting }]">
                 
-                <g class="svg-speech-bubble" @click.stop="show = 'register'">
-                  <rect x="-65" y="-42" width="130" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
-                  <polygon points="-5,-19 5,-19 0,-14" fill="#1890ff" class="bubble-bg" />
+                <g class="svg-speech-bubble" 
+                   @click.stop="show = 'register'" 
+                   :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'">
                   
-                  <g transform="translate(-50, -36) scale(0.9)">
+                  <rect x="-55" y="-40" width="110" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <polygon points="-4,-18 4,-18 0,-13" fill="#1890ff" class="bubble-bg" />
+                  
+                  <g transform="translate(-42, -34.5) scale(0.8)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="5" y="-30" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                  <text x="8" y="-29" fill="#fff" font-size="10" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -111,8 +118,10 @@
                 <line x1="0" y1="-12" x2="16" y2="-2" stroke="#e8c300" stroke-width="2.5" stroke-linecap="round"/>
                 <circle cx="16" cy="-2" r="2" fill="#e8c300"/>
                 <circle cx="0" cy="5" r="10" fill="#fff" stroke="#1a1a1a" stroke-width="2.5"/>
-                <circle cx="-3" cy="3" r="1.5" fill="#1a1a1a"/>
-                <circle cx="3" cy="3" r="1.5" fill="#1a1a1a"/>
+                
+                <circle cx="-3" cy="3" r="1.5" fill="#1a1a1a" class="doll-eye"/>
+                <circle cx="3" cy="3" r="1.5" fill="#1a1a1a" class="doll-eye"/>
+                
                 <path d="M -2 6 Q 0 8 2 6" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
               </g>
             </g>
@@ -325,7 +334,7 @@
 
 <script setup>
 import router from "@/router";
-import {computed, nextTick, reactive, ref} from "vue";
+import {computed, nextTick, reactive, ref, onMounted, onUnmounted} from "vue";
 import {login, register} from "@/request/login.js";
 import {isEmail} from "@/utils/verify-utils.js";
 import {useSettingStore} from "@/store/setting.js";
@@ -349,7 +358,37 @@ const isPwdFocused = ref(false);
 const isEmailFocused = ref(false); 
 const currentFocus = ref(''); 
 
-// 控制密码可见性的状态
+// ★ 12秒逻辑控制器 ★
+const showDollBubble = ref(true);
+const isDollResting = ref(false);
+let dollTimer = null;
+
+onMounted(() => {
+  // 页面加载或刷新后，启动 12 秒定时器
+  dollTimer = setTimeout(() => {
+    isDollResting.value = true;
+    showDollBubble.value = false;
+  }, 12000);
+});
+
+onUnmounted(() => {
+  if (dollTimer) {
+    clearTimeout(dollTimer);
+  }
+});
+
+// 鼠标悬浮在小精灵上时：强制显示文字
+const handleDollMouseEnter = () => {
+  showDollBubble.value = true;
+};
+
+// 鼠标离开时：如果已经超过12秒(Resting)，则再次隐藏
+const handleDollMouseLeave = () => {
+  if (isDollResting.value) {
+    showDollBubble.value = false;
+  }
+};
+
 const showLoginPwd = ref(false);
 const showRegPwd = ref(false);
 const showRegConfirmPwd = ref(false);
@@ -374,8 +413,8 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "输入账号中... 不要输错哦", icon: "mingcute:eye-2-fill" };
-    return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 我们在看着哦", icon: "mingcute:eye-2-fill" };
+    return { text: "欢迎回来！请输入账号和密码", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
     if (isPwdFocused.value) return { text: "设个密码吧，我们绝不偷看", icon: "mingcute:eye-close-fill" };
@@ -673,7 +712,7 @@ function submitRegister() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f2f5; 
+  background: #f0f2f5; 
   overflow: hidden;
   
   @media (max-width: 850px) {
@@ -751,21 +790,52 @@ function submitRegister() {
   text-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* ★ 悬浮暂停动画：彻底解决一直晃眼、点不到的问题 ★ */
+/* ==========================================
+   ★ 博士帽小精灵交互动画系统 ★
+   ========================================== */
 .doctor-doll {
   cursor: pointer;
 }
-.doctor-doll:hover .doll-run,
-.doctor-doll:hover .doll-bounce {
+
+/* Hover 踩刹车：定格所有跑跳动画 */
+.doctor-doll:hover .is-running,
+.doctor-doll:hover .is-bouncing {
   animation-play-state: paused;
 }
 
-/* ★ 呼吸式跃动：拉长周期，变得宁静且高级 ★ */
-.doll-run {
-  animation: doll-run 4s infinite alternate ease-in-out;
+/* 轨道 1：恢复最初经典的 0.45s 原生欢快弹跳 */
+.doll-bounce-wrapper.is-bouncing {
+  animation: doll-bounce 0.45s infinite alternate ease-out;
 }
-.doll-bounce {
-  animation: doll-bounce 3s infinite ease-in-out;
+
+/* 轨道 2：动态绑定的前 12 秒活泼跑动状态 */
+.doll-run-wrapper.is-running {
+  animation: doll-run 3.5s infinite alternate ease-in-out;
+}
+
+/* 轨道 2：12秒后触发的安静停靠状态 (精准定位到黑色怪兽头上) */
+.doll-run-wrapper.is-resting {
+  transform: translate(192px, 145px); 
+  transition: transform 0.6s ease;
+}
+
+/* 气泡平滑显示与隐藏 */
+.bubble-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease;
+}
+.bubble-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+/* 赋予生命力的小眼睛独立眨眼动画 */
+.doll-eye {
+  transform-origin: center;
+  animation: blink 3s infinite;
+  transform-box: fill-box;
 }
 
 @keyframes doll-run {
@@ -774,26 +844,21 @@ function submitRegister() {
   100% { transform: translate(237px, 220px); } 
 }
 
-/* 3秒循环一次：短暂轻跳，然后长时间静止，舒适不晃眼 */
 @keyframes doll-bounce {
-  0%, 20%, 100% { transform: translateY(0); }
-  10% { transform: translateY(-20px); } 
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-40px); } 
 }
 
 .svg-speech-bubble {
-  cursor: pointer;
   transform-origin: 0px -12px;
   transition: transform 0.2s ease;
 }
-
 .svg-speech-bubble:hover {
   transform: scale(1.05) translateY(-2px);
 }
-
 .svg-speech-bubble:hover .bubble-bg {
   fill: #40a9ff;
 }
-
 .bubble-bg {
   transition: fill 0.2s ease;
 }
