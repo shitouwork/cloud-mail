@@ -98,17 +98,18 @@
                 
                 <g class="svg-speech-bubble" 
                    @click.stop="show = 'register'" 
-                   :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'">
+                   :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'"
+                   transform="scale(0.95)">
                   
-                  <rect x="-55" y="-40" width="110" height="22" rx="11" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
-                  <polygon points="-4,-18 4,-18 0,-13" fill="#1890ff" class="bubble-bg" />
+                  <rect x="-65" y="-42" width="130" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <polygon points="-5,-19 5,-19 0,-14" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-42, -34.5) scale(0.8)">
+                  <g transform="translate(-50, -36) scale(0.9)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="8" y="-29" fill="#fff" font-size="10" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                  <text x="5" y="-30" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -358,13 +359,11 @@ const isPwdFocused = ref(false);
 const isEmailFocused = ref(false); 
 const currentFocus = ref(''); 
 
-// ★ 12秒逻辑控制器 ★
 const showDollBubble = ref(true);
 const isDollResting = ref(false);
 let dollTimer = null;
 
 onMounted(() => {
-  // 页面加载或刷新后，启动 12 秒定时器
   dollTimer = setTimeout(() => {
     isDollResting.value = true;
     showDollBubble.value = false;
@@ -377,12 +376,10 @@ onUnmounted(() => {
   }
 });
 
-// 鼠标悬浮在小精灵上时：强制显示文字
 const handleDollMouseEnter = () => {
   showDollBubble.value = true;
 };
 
-// 鼠标离开时：如果已经超过12秒(Resting)，则再次隐藏
 const handleDollMouseLeave = () => {
   if (isDollResting.value) {
     showDollBubble.value = false;
@@ -413,8 +410,8 @@ const clearFocus = () => {
 const hintInfo = computed(() => {
   if (show.value === 'login') {
     if (isPwdFocused.value) return { text: "闭眼啦，放心输入你的密码吧", icon: "mingcute:eye-close-fill" };
-    if (isEmailFocused.value) return { text: "输入账号中... 我们在看着哦", icon: "mingcute:eye-2-fill" };
-    return { text: "欢迎回来！请输入账号和密码", icon: "mingcute:sparkles-fill" };
+    if (isEmailFocused.value) return { text: "输入账号中... 不要输错哦", icon: "mingcute:eye-2-fill" };
+    return { text: "欢迎回来！请输入账号信息开始使用邮箱系统", icon: "mingcute:sparkles-fill" };
   } else {
     if (currentFocus.value === 'code') return { text: "最后一步: 填入专属注册码开启大门", icon: "mingcute:key-2-fill" };
     if (isPwdFocused.value) return { text: "设个密码吧，我们绝不偷看", icon: "mingcute:eye-close-fill" };
@@ -790,36 +787,28 @@ function submitRegister() {
   text-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* ==========================================
-   ★ 博士帽小精灵交互动画系统 ★
-   ========================================== */
 .doctor-doll {
   cursor: pointer;
 }
 
-/* Hover 踩刹车：定格所有跑跳动画 */
 .doctor-doll:hover .is-running,
 .doctor-doll:hover .is-bouncing {
   animation-play-state: paused;
 }
 
-/* 轨道 1：恢复最初经典的 0.45s 原生欢快弹跳 */
 .doll-bounce-wrapper.is-bouncing {
   animation: doll-bounce 0.45s infinite alternate ease-out;
 }
 
-/* 轨道 2：动态绑定的前 12 秒活泼跑动状态 */
 .doll-run-wrapper.is-running {
   animation: doll-run 3.5s infinite alternate ease-in-out;
 }
 
-/* 轨道 2：12秒后触发的安静停靠状态 (精准定位到黑色怪兽头上) */
 .doll-run-wrapper.is-resting {
   transform: translate(192px, 145px); 
   transition: transform 0.6s ease;
 }
 
-/* 气泡平滑显示与隐藏 */
 .bubble-visible {
   opacity: 1;
   visibility: visible;
@@ -831,7 +820,6 @@ function submitRegister() {
   transition: all 0.3s ease;
 }
 
-/* 赋予生命力的小眼睛独立眨眼动画 */
 .doll-eye {
   transform-origin: center;
   animation: blink 3s infinite;
@@ -845,8 +833,8 @@ function submitRegister() {
 }
 
 @keyframes doll-bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-40px); } 
+  0%, 20%, 100% { transform: translateY(0); }
+  10% { transform: translateY(-20px); } 
 }
 
 .svg-speech-bubble {
