@@ -101,15 +101,15 @@
                    :class="showDollBubble ? 'bubble-visible' : 'bubble-hidden'"
                    transform="scale(0.95)">
                   
-                  <rect x="-65" y="-42" width="130" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
+                  <rect x="-70" y="-42" width="140" height="24" rx="12" fill="#1890ff" filter="url(#bubble-shadow)" class="bubble-bg" />
                   <polygon points="-5,-19 5,-19 0,-14" fill="#1890ff" class="bubble-bg" />
                   
-                  <g transform="translate(-50, -36) scale(0.9)">
+                  <g transform="translate(-56, -36) scale(0.85)">
                     <circle cx="6" cy="4" r="2.5" fill="#fff"/>
                     <path d="M 1 11 C 1 7 11 7 11 11" fill="#fff"/>
                   </g>
 
-                  <text x="5" y="-30" fill="#fff" font-size="11" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none;">
+                  <text x="6" y="-30" fill="#fff" font-size="10.5" font-weight="600" text-anchor="middle" dominant-baseline="central" style="pointer-events: none; letter-spacing: 0.2px;">
                     点击 Sign Up 注册！
                   </text>
                 </g>
@@ -796,8 +796,9 @@ function submitRegister() {
   animation-play-state: paused;
 }
 
+/* ★ 丝滑的物理重力跳跃：模拟重力的加减速，彻底解决生硬抖动 ★ */
 .doll-bounce-wrapper.is-bouncing {
-  animation: doll-bounce 0.45s infinite alternate ease-out;
+  animation: doll-bounce 2.5s infinite;
 }
 
 .doll-run-wrapper.is-running {
@@ -833,8 +834,16 @@ function submitRegister() {
 }
 
 @keyframes doll-bounce {
-  0%, 20%, 100% { transform: translateY(0); }
-  10% { transform: translateY(-20px); } 
+  /* 0%~10% 向上跳跃(缓出减速) */
+  0%, 20%, 100% { 
+    transform: translateY(0); 
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); 
+  }
+  /* 10%~20% 向下回落(缓入加速) */
+  10% { 
+    transform: translateY(-22px); 
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); 
+  } 
 }
 
 .svg-speech-bubble {
@@ -850,7 +859,6 @@ function submitRegister() {
 .bubble-bg {
   transition: fill 0.2s ease;
 }
-
 
 .blinking-eyes circle {
   transform-box: fill-box;
