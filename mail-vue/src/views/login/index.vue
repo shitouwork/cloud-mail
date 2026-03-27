@@ -89,7 +89,7 @@
           </g>
 
           <g class="doctor-doll" 
-             v-if="show === 'login' && !isEmailFocused"
+             v-if="settingStore.settings.register === 0 && show === 'login' && !isEmailFocused"
              @mouseenter="handleDollMouseEnter"
              @mouseleave="handleDollMouseLeave">
             
